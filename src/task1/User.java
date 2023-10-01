@@ -1,3 +1,5 @@
+package task1;
+
 import lombok.Data;
 @Data
 public class User {
