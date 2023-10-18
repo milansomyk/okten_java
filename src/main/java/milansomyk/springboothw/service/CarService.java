@@ -2,7 +2,9 @@ package milansomyk.springboothw.service;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
+import milansomyk.springboothw.dto.CarDto;
 import milansomyk.springboothw.entity.Car;
+import milansomyk.springboothw.mapper.CarMapper;
 import milansomyk.springboothw.repository.CarRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,21 +17,25 @@ import java.util.Optional;
 
 public class CarService {
     private final CarRepository carRepository;
-    @PostConstruct
-    public void postConstruct(){
-        Car car1 = new Car("golf 4","volkswagen",75);
-        carRepository.save(car1);
+    private final CarMapper carMapper;
+    public Optional<CarDto> getById(int id){
+        Car car = carRepository.findById(id).get();
+        CarDto dto = carMapper.toDto(car);
+        return Optional.ofNullable(dto);
     }
-    public List<Car> getAll(){
-        return this.carRepository.findAll();
-    }
-    public Optional<Car> getById(int id){
-        return this.carRepository.findById(id);
-    }
-    public Car create(Car car){
-        return this.carRepository.save(car);
+    public CarDto create(CarDto carDto){
+        Car car = carMapper.toCar(carDto);
+        Car savedCar = carRepository.save(car);
+        return carMapper.toDto(savedCar);
     }
     public void deleteById(int id){
         this.carRepository.deleteById(id);
+    }
+
+    public List<CarDto> getAll(){
+        return carRepository.findAll()
+                .stream()
+                .map(carMapper::toDto)
+                .toList();
     }
 }

@@ -1,7 +1,8 @@
 package milansomyk.springboothw.controllers;
 
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
-import milansomyk.springboothw.entity.Car;
+import milansomyk.springboothw.dto.CarDto;
 import milansomyk.springboothw.service.CarService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,16 @@ public class CarController {
     private final CarService carService;
 
     @GetMapping
-    public ResponseEntity<List<Car>> getAll(){
+    public ResponseEntity<List<CarDto>> getAll(){
         return ResponseEntity.ok(this.carService.getAll());
     }
 
+    @GetMapping
+    public ResponseEntity<CarDto> getById(@PathParam(value = "id") int id){return ResponseEntity.of(this.carService.getById(id));}
+
     @PostMapping
-    public ResponseEntity<Car> create(@RequestBody Car car){
-        return ResponseEntity.ok(carService.create(car));
+    public ResponseEntity<CarDto> create(@RequestBody CarDto carDto){
+        return ResponseEntity.ok(carService.create(carDto));
     }
+
 }
