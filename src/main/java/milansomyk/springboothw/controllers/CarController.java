@@ -1,5 +1,6 @@
 package milansomyk.springboothw.controllers;
 
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import milansomyk.springboothw.dto.CarDto;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/cars")
+
 public class CarController {
     private final CarService carService;
 
@@ -23,7 +25,7 @@ public class CarController {
 
 
     @PostMapping
-    public ResponseEntity<CarDto> create(@RequestBody CarDto carDto){
+    public ResponseEntity<CarDto> create(@RequestBody @Valid CarDto carDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(carService.create(carDto));
     }
 
