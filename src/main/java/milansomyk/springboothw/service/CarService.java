@@ -1,12 +1,10 @@
 package milansomyk.springboothw.service;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import milansomyk.springboothw.dto.CarDto;
 import milansomyk.springboothw.entity.Car;
 import milansomyk.springboothw.mapper.CarMapper;
 import milansomyk.springboothw.repository.CarRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +32,18 @@ public class CarService {
 
     public List<CarDto> getAll(){
         return carRepository.findAll()
+                .stream()
+                .map(carMapper::toDto)
+                .toList();
+    }
+    public List<CarDto> getByPower(int power){
+        return this.carRepository.getCarsByPower(power)
+                .stream()
+                .map(carMapper::toDto)
+                .toList();
+    }
+    public List<CarDto> getByProducer (String producer){
+        return this.carRepository.getCarsByProducer(producer)
                 .stream()
                 .map(carMapper::toDto)
                 .toList();
