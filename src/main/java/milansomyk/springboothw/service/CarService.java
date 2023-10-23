@@ -6,7 +6,10 @@ import milansomyk.springboothw.entity.Car;
 import milansomyk.springboothw.mapper.CarMapper;
 import milansomyk.springboothw.repository.CarRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,5 +50,14 @@ public class CarService {
                 .stream()
                 .map(carMapper::toDto)
                 .toList();
+    }
+    public CarDto addPhotoByCarId(int id, MultipartFile file) throws IOException {
+         Car car = this.carRepository.findById(id).orElseThrow();
+         String originalFileName = file.getOriginalFilename();
+         String path = System.getProperty("user.home") + File.separator+"cars"+File.separator + originalFileName;
+         file.transferTo(new File(path));
+         car.setPhoto(originalFileName);
+         Car savedCar = this.carRepository.save(car);
+         return this.carMapper.toDto(savedCar);
     }
 }

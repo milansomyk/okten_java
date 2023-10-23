@@ -1,6 +1,8 @@
 package milansomyk.springboothw.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,4 +29,7 @@ public class CarDto {
     @JsonView(value = {Views.Level1.class, Views.Level2.class})
     @Min(value = 50, message = "power: min: {value}")
     private Integer power;
+
+    @JsonView(value = {Views.Level1.class})
+    private String photo;
 }

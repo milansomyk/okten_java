@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 
 @RestControllerAdvice
 public class ErrorController {
@@ -19,6 +22,14 @@ public class ErrorController {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorDto.builder()
                         .messages(e.getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList())
+                        .build());
+    }
+    @ExceptionHandler({IOException.class})
+    public ResponseEntity<ErrorDto> handleError(IOException e, WebRequest webRequest){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorDto.builder()
+                        .messages(Arrays.asList(e.getMessage()))
                         .build());
     }
 }

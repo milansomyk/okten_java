@@ -2,13 +2,16 @@ package milansomyk.springboothw.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import milansomyk.springboothw.dto.CarDto;
 import milansomyk.springboothw.service.CarService;
 import milansomyk.springboothw.view.Views;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -45,4 +48,11 @@ public class CarController {
     @JsonView(value = {Views.Level2.class})
     @GetMapping("/producer/{value}")
     public ResponseEntity<List<CarDto>> getByBroducer(@PathVariable String value){return ResponseEntity.ok(this.carService.getByProducer(value));}
+
+    @PostMapping("/{id}/photo")
+    @SneakyThrows
+    @JsonView(Views.Level1.class)
+    public ResponseEntity<CarDto> uploadPhoto(@PathVariable int id, MultipartFile photo) {
+        return ResponseEntity.ok(this.carService.addPhotoByCarId(id,photo));
+    }
 }

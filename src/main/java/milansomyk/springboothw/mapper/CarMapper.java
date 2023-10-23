@@ -12,9 +12,10 @@ public class CarMapper {
                 .power(car.getPower())
                 .model(car.getModel())
                 .producer(car.getProducer())
+                .photo(car.getPhoto())
                 .build();
     }
     public Car toCar(CarDto carDto){
-        return new Car(carDto.getModel(), carDto.getProducer(),carDto.getPower());
+        return new Car(carDto.getModel(), carDto.getProducer(),carDto.getPower(),carDto.getPhoto());
     }
 }
