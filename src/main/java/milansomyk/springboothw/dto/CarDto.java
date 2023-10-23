@@ -6,12 +6,16 @@ import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import milansomyk.springboothw.view.Views;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CarDto {
     @JsonView(value = {Views.Level1.class})
     private Integer id;

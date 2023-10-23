@@ -19,6 +19,7 @@ import java.util.Optional;
 public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
+    private final MailService mailService;
     public Optional<CarDto> getById(int id){
         Car car = carRepository.findById(id).get();
         CarDto dto = carMapper.toDto(car);
@@ -27,9 +28,11 @@ public class CarService {
     public CarDto create(CarDto carDto){
         Car car = carMapper.toCar(carDto);
         Car savedCar = carRepository.save(car);
+        mailService.notifyCreatedCar(carMapper.toDto(savedCar));
         return carMapper.toDto(savedCar);
     }
     public void deleteById(int id){
+        mailService.notifyDeletedCar(id);
         this.carRepository.deleteById(id);
     }
 

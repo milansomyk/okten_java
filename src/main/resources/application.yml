@@ -9,3 +9,13 @@ spring:
     url: jdbc:mysql://localhost:3306/hw8?createIfNotExist=true
     username: root
     password: root
+  mail:
+    host: smtp.gmail.com
+    username: milansomyk@gmail.com
+    password: vapcnbuemszhqbfe
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
