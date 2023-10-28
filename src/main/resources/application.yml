@@ -9,3 +9,7 @@ spring:
     url: jdbc:mysql://localhost:3306/hw8?createIfNotExist=true
     username: root
     password: root
+  data:
+    mongodb:
+      uri: mongodb+srv://root:root@cluster0.urvydqm.mongodb.net/?retryWrites=true&w=majority
+      database: "cars"
