@@ -13,3 +13,5 @@ spring:
     mongodb:
       uri: mongodb+srv://root:root@cluster0.urvydqm.mongodb.net/?retryWrites=true&w=majority
       database: "cars"
+jwt:
+  signingKey: super_long_secret_key_that_nobody_knows
