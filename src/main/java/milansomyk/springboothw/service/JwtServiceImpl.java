@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -31,6 +32,12 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
+    public Duration extractDuration(String token) {
+        Date date = resolveClaim(token, Claims::getExpiration);
+        return Duration.ofSeconds(date.getTime());
+    }
+
+    @Override
     public String extractUsername(String token) {
         return resolveClaim(token, Claims::getSubject);
     }
@@ -41,15 +48,29 @@ public class JwtServiceImpl implements JwtService{
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(", "));
+        return generateToken(Map.of("roles", roles), userDetails, Duration.ofSeconds(15));
+    }
+    public String generateToken(Map<String, String> claims, UserDetails userDetails, Duration duration){
         return Jwts
                 .builder()
-                .setClaims(Map.of("roles", roles))
+                .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + duration.toMillis()))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+    @Override
+    public boolean isRefreshType(String token) {
+        return resolveClaim(token, claims -> claims.get("type", String.class).equals("refresh"));
+    }
+
+    @Override
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateToken(Map.of("type","refresh"), userDetails, Duration.ofDays(2));
+    }
+
     private <T> T resolveClaim(String token, Function<Claims, T> resolver){
         Claims claims = extractClaims(token);
         return resolver.apply(claims);
